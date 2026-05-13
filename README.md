@@ -54,7 +54,7 @@ can be dropped in without touching the rest.
 
 ## What it does
 
-![OpenSlop popup overlaid on a feed page, showing the Hide AI Posts toggle, the Slop Sensitivity slider at Scorched Earth, the Audit/Minimize/Hide segmented control, and a session donut chart with 17 hidden items split between AI Post and AI Slop categories.](./docs/popup-screenshot.png)
+![OpenSlop popup overlaid on a feed page, showing the Hide AI Posts toggle, the Slop Sensitivity slider at Scorched Earth, the Audit/Minimize/Hide segmented control, and a session donut chart with 22 hidden items split between AI Post (17) and AI Slop (5) categories.](./docs/popup-screenshot.png)
 
 The popup is one screen — three small cards and a session donut:
 

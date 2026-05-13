@@ -13,11 +13,12 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   glance. Aria-label updated to match. The slop slider keeps its
   "Slop Sensitivity" title, and the on-screen sensitivity badge
   ("Off / Light / Medium / Strict / 🔥 Scorched Earth") and per-level
-  forecast drawer are untouched. Note: `docs/popup-screenshot.png`
-  still shows "Hide AI" and needs regeneration. When regenerating,
-  also scrub the personal LinkedIn profile thumbnail visible in the
-  "Start a post" card (top-left of frame) — use an anonymized account
-  or crop / blur that region before committing.
+  forecast drawer are untouched.
+- **`docs/popup-screenshot.png` regenerated** to show the current
+  "Hide AI Posts" label, captured from a viewport with no personal
+  profile thumbnail visible. Donut counters reflect a longer session
+  (22 hidden — AI Post 17 / AI Slop 5). README alt text updated to
+  match the new counts.
 - **Fresh-install defaults raised to "filter on, filter hard."**
   `HU.DEFAULT_SETTINGS.slopSensitivityLevel` 0 → 4 (Scorched Earth)
   and `HU.DEFAULT_SETTINGS.aiFilterEnabled` false → true, so a
