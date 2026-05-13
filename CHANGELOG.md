@@ -19,6 +19,11 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   profile thumbnail visible. Donut counters reflect a longer session
   (22 hidden — AI Post 17 / AI Slop 5). README alt text updated to
   match the new counts.
+- **README install section rewritten as a 60-second TL;DR.** Now
+  includes the previously-implicit "step 0: get the folder" (Download
+  ZIP or git clone), two side-by-side tables for browser-specific
+  steps, and an explicit Firefox-temporary-add-on caveat noting that
+  unsigned add-ons don't persist across restarts on stable Firefox.
 - **Fresh-install defaults raised to "filter on, filter hard."**
   `HU.DEFAULT_SETTINGS.slopSensitivityLevel` 0 → 4 (Scorched Earth)
   and `HU.DEFAULT_SETTINGS.aiFilterEnabled` false → true, so a

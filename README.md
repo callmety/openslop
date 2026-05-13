@@ -76,20 +76,42 @@ refreshed live as the content script flags new posts.
 That's it. Settings sync via `chrome.storage.sync` so a second browser
 on the same Google/Microsoft account picks them up automatically.
 
-## Install (developer mode)
+## Install (60 seconds, no store, no signing)
 
-There are no published GitHub releases and no Chrome Web Store / AMO
-listing. Install from source:
+There's no Chrome Web Store / AMO listing. You load it as an unpacked
+extension straight from this repo.
 
-**Chrome / Edge / Brave / other Chromium**
-1. Open `chrome://extensions`.
-2. Toggle **Developer mode** (top-right).
-3. Click **Load unpacked** and select this folder.
+**1. Get the folder.** Either:
+- Click the green **Code** button at the top of this page →
+  **Download ZIP** → unzip it. Remember where you put the
+  unzipped folder; you'll need its path in step 3.
+- *Or* `git clone https://github.com/callmety/openslop.git`
 
-**Firefox**
-1. Open `about:debugging#/runtime/this-firefox`.
-2. Click **Load Temporary Add-on** and select `manifest.firefox.json` inside
-   this folder.
+**2. Open your browser's extensions page.**
+
+| Browser | URL |
+|---|---|
+| Chrome / Edge / Brave / Chromium | `chrome://extensions` |
+| Firefox | `about:debugging#/runtime/this-firefox` |
+
+**3. Load it.**
+
+| Browser | Steps |
+|---|---|
+| Chrome / Edge / Brave / Chromium | Toggle **Developer mode** (top-right) → click **Load unpacked** → pick the folder from step 1. |
+| Firefox | Click **Load Temporary Add-on…** → pick `manifest.firefox.json` *inside* the folder from step 1. |
+
+**4. Reload your LinkedIn tab.** Click the OpenSlop icon in the toolbar
+to see the popup. Slop Sensitivity defaults to Scorched Earth and the
+AI filter is on — you should immediately see post cards getting
+audited / minimized / hidden.
+
+> ⚠️ **Firefox caveat:** "Load Temporary Add-on" only persists until
+> you close Firefox. Standard Firefox release won't permanently
+> install an unsigned add-on. To make it stick across restarts you'd
+> need Firefox Developer Edition / Nightly with
+> `xpinstall.signatures.required` set to `false` in `about:config`.
+> That's a fork-it-yourself decision.
 
 ## Privacy
 
