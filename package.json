@@ -1,0 +1,50 @@
+{
+  "name": "openslop",
+  "version": "1.0.0",
+  "description": "Open-source browser extension that hides AI-slop posts from your feed with a single sensitivity slider.",
+  "private": true,
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/callmety/openslop.git"
+  },
+  "homepage": "https://github.com/callmety/openslop#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "audit:branding": "node scripts/audit-branding.js",
+    "typecheck": "node -e \"process.stdout.write('typecheck: JS repo (no TS sources)\\n')\"",
+    "test": "jest",
+    "test:extension": "npm test -- --runInBand",
+    "test:coverage": "jest --coverage --runInBand",
+    "test:e2e": "playwright test",
+    "test:e2e:extension": "npm run test:e2e:smoke",
+    "test:e2e:smoke": "playwright test tests/e2e/extension.smoke.spec.js",
+    "test:e2e:list": "playwright test --list",
+    "test:e2e:debug": "PWDEBUG=1 playwright test tests/e2e/extension.smoke.spec.js",
+    "test:e2e:install": "playwright install chromium",
+    "test:e2e:ci": "playwright test tests/e2e/extension.smoke.spec.js",
+    "check:no-console": "node scripts/check-no-console.js",
+    "check:no-network": "node scripts/check-no-network.js",
+    "format:check": "npm run lint -- --fix-dry-run",
+    "lint": "eslint shared content popup tests background.js background.firefox.js playwright.config.js jest.config.js eslint.config.mjs --max-warnings=0",
+    "lint:ci": "npm run lint",
+    "build:chrome": "node scripts/build-chrome-zip.js",
+    "build:firefox": "node scripts/build-firefox-zip.js",
+    "build:extension": "npm run build",
+    "build:extension:prod": "npm run build",
+    "build": "npm run build:chrome && npm run build:firefox",
+    "preflight": "bash scripts/preflight.sh",
+    "validate:extension": "npm test -- tests/manifest.smoke.test.js --runInBand && npm test -- tests/build.artifacts.test.js --runInBand",
+    "verify:release": "npm run typecheck && npm run lint:ci && npm run format:check && npm run check:no-console && npm run check:no-network && npm run audit:branding && npm run test:extension && npm run build:extension && npm run validate:extension && npm run test:e2e:extension"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "eslint": "^9.38.0",
+    "jest": "^30.4.2",
+    "jest-axe": "^10.0.0",
+    "jest-environment-jsdom": "^30.4.1",
+    "jsdom": "^26.1.0"
+  }
+}

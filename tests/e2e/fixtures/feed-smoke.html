@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenSlop E2E Feed Smoke</title>
+</head>
+<body>
+  <main>
+    <div role="list" data-testid="mainFeed">
+      <div data-display-contents="true">
+        <div>
+          <div role="listitem" data-urn="urn:li:activity:1" id="card-1">
+            <span data-testid="expandable-text-box">This is a promoted noise sample for deterministic smoke coverage.</span>
+          </div>
+        </div>
+      </div>
+      <div data-display-contents="true">
+        <div>
+          <div role="listitem" data-urn="urn:li:activity:2" id="card-2">
+            <span data-testid="expandable-text-box">This control card should remain visible.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

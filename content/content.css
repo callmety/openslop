@@ -1,0 +1,149 @@
+/* OpenSlop — Content Styles
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Post-card-only product surface: the only data attributes the content script
+ * writes are HIDDEN_ATTR (`data-hu-hidden`), DIMMED_ATTR (`data-hu-dimmed`),
+ * AUDIT_ATTR (`data-hu-audit`), and KIND_ATTR (`data-hu-kind`). Everything
+ * here is gated on those.
+ * ──────────────────────────────────────────────────────────────────────────── */
+
+/* ── Hide mode ────────────────────────────────────────────────────────────── */
+/* Cards classified by the AI filter or slop slider are display:none'd.        */
+
+[data-hu-hidden] {
+  display:        none !important;
+  visibility:     hidden !important;
+  pointer-events: none !important;
+  user-select:    none !important;
+}
+
+/* 2026: each feed card listitem is nested 3–4 levels deep inside obfuscated
+ * wrapper divs inside div[data-testid="mainFeed"]. When a card shell is
+ * hidden, ancestor wrappers can still occupy vertical space (margin/padding/
+ * min-height).
+ *
+ * We hide either:
+ *   1) a role=listitem card itself, or
+ *   2) a FeedType_* outer shell selected by resolveFeedCard() (preferred when
+ *      the host assigns spacing/background to that shell).
+ *
+ * Collapse the entire wrapper chain with :has() so no ghost gap remains.
+ * Scoped to mainFeed descendants to avoid false-collapsing nested listitems
+ * in other UI contexts (e.g. dropdowns, PYMK modules). */
+div[data-testid="mainFeed"] div:has(> [data-hu-hidden][role="listitem"]),
+div[data-testid="mainFeed"] div:has(> div > [data-hu-hidden][role="listitem"]),
+div[data-testid="mainFeed"] div:has(> div > div > [data-hu-hidden][role="listitem"]),
+div[data-testid="mainFeed"] div:has(> div > div > div > [data-hu-hidden][role="listitem"]),
+div[data-testid="mainFeed"] div:has(> [data-hu-hidden][componentkey*="FeedType_"]),
+div[data-testid="mainFeed"] div:has(> div > [data-hu-hidden][componentkey*="FeedType_"]),
+div[data-testid="mainFeed"] div:has(> div > div > [data-hu-hidden][componentkey*="FeedType_"]),
+div[data-testid="mainFeed"] div:has(> div > div > div > [data-hu-hidden][componentkey*="FeedType_"]) {
+  display: none !important;
+}
+
+/* ── Minimize mode ────────────────────────────────────────────────────────── */
+/* Cards collapsed to display:none with the reason strip still visible above.  */
+
+[data-hu-dimmed] {
+  display: none !important;
+}
+
+/* ── Reason strip ─────────────────────────────────────────────────────────── */
+/* A thin sibling row injected BEFORE the hidden/dimmed card. Visible in       */
+/* Minimize mode and Hide mode (when "show hidden reasons" is set). Contains   */
+/* the hide-reason label and a "Show" button that reveals the card for this   */
+/* page visit.                                                                 */
+
+.hu-reason-strip {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  gap:             8px;
+  padding:         4px 12px;
+  background:      rgba(0, 0, 0, 0.04);
+  border:          1px solid rgba(0, 0, 0, 0.08);
+  border-radius:   4px;
+  margin-bottom:   2px;
+}
+
+/* ── Expanded (revealed) state — strip docks onto the card below it ───────── */
+
+.hu-reason-strip--expanded {
+  border-bottom-left-radius:  0;
+  border-bottom-right-radius: 0;
+  border-bottom:              none;
+  margin-bottom:              0;
+}
+
+/* Remove top corners on the card's visual shell so it docks flush to the strip.
+   The host's border-radius + box-shadow lives on the first child div inside
+   fie-impression-container (carries the .relative utility class).
+   We target it both by class and as :first-child to survive class name churn,
+   and also zero out any artdeco-card wrapper. */
+.hu-reason-strip--expanded + * > .relative,
+.hu-reason-strip--expanded + * > div:first-child,
+.hu-reason-strip--expanded + * .artdeco-card {
+  border-top-left-radius:  0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.hu-reason-strip__label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size:   11px;
+  color:       #666;
+  flex:        1;
+}
+
+.hu-reason-strip__label::before {
+  content: 'OpenSlop: ';
+  font-weight: 600;
+  color:       #999;
+}
+
+.hu-reason-strip__show {
+  padding:       2px 8px;
+  border:        1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  background:    #fff;
+  color:         #444;
+  font-family:   -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size:     10px;
+  font-weight:   600;
+  cursor:        pointer;
+  flex-shrink:   0;
+  transition:    background 0.12s, color 0.12s;
+}
+
+.hu-reason-strip__show:hover {
+  background: #f0f0f0;
+  color:      #111;
+}
+
+.hu-reason-strip__show:focus-visible {
+  outline: 2px solid #0a66c2;
+  outline-offset: 1px;
+}
+
+.hu-reason-strip__show--revealed {
+  background: #e8f0fb;
+  color:      #0a66c2;
+  border-color: #0a66c2;
+}
+
+.hu-reason-strip__show--revealed:hover {
+  background: #d0e4f7;
+  color:      #004182;
+}
+
+/* ── Audit Mode (Match Highlight) ─────────────────────────────────────────── */
+/* Cards matched by any active filter are outlined in amber rather than hidden */
+/* so users can audit new rules before committing to full suppression.         */
+
+[data-hu-audit] {
+  outline:        2px solid #f59e0b !important;
+  outline-offset: 2px !important;
+  position:       relative !important;
+}
+
+[data-hu-audit]:hover {
+  outline-color: #d97706 !important;
+}

@@ -1,0 +1,26 @@
+node_modules/
+coverage/
+dist/
+artifacts/
+playwright-report/
+test-results/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.~lock.*
+
+# Logs and local env
+*.log
+.env
+.env.*
+!.env.example
+
+# Packaged tarballs
+*.tgz

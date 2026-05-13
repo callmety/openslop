@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: This project is unmaintained
+    url: https://github.com/callmety/openslop#readme
+    about: |
+      Issues will not be triaged and no maintainer is monitoring this repo.
+      The PolyForm Noncommercial 1.0.0 license permits forking for any
+      noncommercial purpose — please do that instead. See the README and
+      LICENSE for details.

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenSlop</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <main class="popup">
+
+    <!-- Single pane: AI filter toggle + slop slider + live donut chart -->
+    <section id="panelTemp" class="panel temp-panel">
+      <div id="aiFilterMount"></div>
+      <div id="slopSensitivityMount"></div>
+      <div id="hiddenModeMount"></div>
+
+      <div class="donut-panel__inner">
+        <div class="donut-wrap">
+          <svg id="donutSvg" class="donut-svg" viewBox="0 0 200 200" aria-hidden="true"></svg>
+          <div class="donut-center">
+            <span id="donutTotal" class="donut-center__value" aria-live="polite">—</span>
+            <span class="donut-center__label">hidden</span>
+          </div>
+        </div>
+
+        <ul id="donutLegend" class="donut-legend" aria-label="Category breakdown"></ul>
+      </div>
+    </section>
+
+  <!-- Live session capsule -->
+  <div id="liveCapsule" class="live-capsule" hidden aria-live="polite" role="status">
+    <span class="live-capsule__dot" aria-hidden="true"></span>
+    <span class="live-capsule__text">
+      <span id="liveCapsuleShown" class="live-capsule__val live-capsule__val--shown">0</span>
+      <span class="live-capsule__sep"> shown</span>
+      <span class="live-capsule__divider" aria-hidden="true">·</span>
+      <span id="liveCapsuleHidden" class="live-capsule__val live-capsule__val--hidden">0</span>
+      <span class="live-capsule__sep"> hidden</span>
+    </span>
+    <span class="live-capsule__label">this session</span>
+  </div>
+
+  </main>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/normalize.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="../shared/chrome-api.js"></script>
+  <script src="../shared/presets.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

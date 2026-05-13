@@ -1,0 +1,1216 @@
+/* OpenSlop — Popup Styles
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 380px wide. Flat surfaces, minimal shadows, professional-network blue accent.
+ * ──────────────────────────────────────────────────────────────────────────── */
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin:     0;
+  padding:    0;
+}
+
+[hidden] { display: none !important; }
+
+:root {
+  /* ── Core brand ───────────────────────────────────────── */
+  --accent:        #0a66c2;
+  --accent-subtle: rgba(10, 102, 194, 0.12);
+
+  /* ── Surfaces: dark — desaturated grays, not navy ── */
+  --bg:            #111827;
+  --bg-surface:    #1b1f23;
+  --bg-input:      #252b32;
+  --bg-item:       #252b32;
+  --bg-item-hover: #2e363f;
+  --bg-card:       #1b1f23;
+
+  --app-highlight: rgba(255, 255, 255, 0.04);
+
+  /* ── Text hierarchy ──────────────────────────────────────── */
+  --text-2:        rgba(255, 255, 255, 0.65);
+  --text-3:        rgba(255, 255, 255, 0.45);
+  --text-4:        rgba(255, 255, 255, 0.30);
+  --text-primary:  rgba(255, 255, 255, 0.90);
+  --text-secondary:rgba(255, 255, 255, 0.65);
+  --text-muted:    rgba(255, 255, 255, 0.45);
+
+  /* ── Slider ──────────────────────────────────────────────── */
+  --slider-track:  #374151;
+  --slop-good:     #22c55e;
+  --slop-mid:      #facc15;
+  --slop-mid-rail: #d4c95a;
+  --slop-hot:      #ef4444;
+
+  /* ── Borders ──────────────────────────────────────────── */
+  --border:        rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* ── Status dots ─────────────────────────────────────────── */
+  --dot-green:  #4ade80;
+
+  /* ── Radii ───────────────────────────────────────────────── */
+  --radius:       8px;
+  --radius-sm:    6px;
+  --radius-xs:    4px;
+  --radius-pill:  999px;
+
+  /* ── Motion ──────────────────────────────────────────────── */
+  --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Card titles (used by the AI filter / hidden-mode / slop slider cards) */
+  --card-title-size:   14px;
+  --card-title-weight: 600;
+  --card-title-line:   1.2;
+
+  /* ── Temp/Home tile rhythm ─────────────────────────── */
+  --temp-page-pad: 12px;
+  --temp-tile-gap: 6px;
+
+  /* ── Semantic states ──────────────────────────────────── */
+  --danger:        #e34c4c;
+
+  /* ── Typography ───────────────────────────────────────── */
+  --font:          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --dur-fast:   110ms;
+  --dur-base:   160ms;
+  --ease:       cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ── Light mode token overrides — white surfaces, same blue accent ── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --accent-subtle: rgba(10, 102, 194, 0.10);
+
+    --bg:            #f3f4f6;
+    --bg-surface:    #ffffff;
+    --bg-input:      #ffffff;
+    --bg-item:       #ffffff;
+    --bg-item-hover: #f7f9fb;
+    --bg-card:       #ffffff;
+
+    --app-highlight: rgba(0, 0, 0, 0.03);
+
+    --slider-track:  #d1d5db;
+    --slop-good:     #16a34a;
+    --slop-mid:      #ca8a04;
+    --slop-mid-rail: #b8ae36;
+    --slop-hot:      #dc2626;
+
+    --border:        rgba(0, 0, 0, 0.10);
+    --border-strong: rgba(0, 0, 0, 0.15);
+
+    --text-2:        rgba(0, 0, 0, 0.65);
+    --text-3:        rgba(0, 0, 0, 0.45);
+    --text-4:        rgba(0, 0, 0, 0.30);
+    --text-primary:  rgba(0, 0, 0, 0.90);
+    --text-secondary:rgba(0, 0, 0, 0.65);
+    --text-muted:    rgba(0, 0, 0, 0.45);
+
+    --dot-green:  #057642;
+  }
+}
+
+html,
+body {
+  width:        380px;
+  background:   var(--bg);
+  color:        var(--text-primary);
+  font-family:  var(--font);
+  font-size:    13px;
+  line-height:  1.5;
+  color-scheme: dark light;
+}
+
+/* Body sizes to its content (capped by Chrome's per-popup max ~600px).
+   No fixed height = no dead space below the donut. */
+html, body {
+  height:    fit-content;
+  max-height: 600px;
+}
+
+/* ── Popup Container ──────────────────────────────────────────────────────── */
+.popup {
+  display:        flex;
+  flex-direction: column;
+  position:       relative;
+}
+
+/* ── Avatar Dropdown Menu ─────────────────────────────────────────────────── */
+.avatar-menu {
+  position:      absolute;
+  top:           calc(100% + 6px);
+  left:          0;
+  z-index:       200;
+  min-width:     180px;
+  background:    var(--bg-surface);
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow:    0 1px 4px rgba(0,0,0,0.18);
+  overflow:      hidden;
+}
+
+.avatar-menu[hidden] {
+  display: none;
+}
+
+.avatar-menu__list {
+  list-style: none;
+  padding:    4px 0;
+  margin:     0;
+}
+
+.avatar-menu__item {
+  display:     flex;
+  align-items: center;
+  width:       100%;
+  padding:     8px 14px;
+  background:  transparent;
+  border:      none;
+  color:       var(--text-primary);
+  cursor:      pointer;
+  font-family: var(--font);
+  font-size:   12px;
+  font-weight: 500;
+  text-align:  left;
+  text-decoration: none;
+  transition:  background 0.1s;
+  white-space: nowrap;
+  overflow:    hidden;
+  text-overflow: ellipsis;
+  box-sizing:  border-box;
+}
+
+.avatar-menu__item:hover {
+  background: var(--bg-item-hover);
+}
+
+.avatar-menu__item:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.input {
+  flex:         1;
+  background:   var(--bg-input);
+  border:       1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color:        var(--text-primary);
+  font-size:    13px;
+  padding:      7px 10px;
+  outline:      none;
+  transition:   border-color 0.15s;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ── Panels ───────────────────────────────────────────────────────────────── */
+.panel {
+  display:    flex;
+  flex-direction: column;
+  flex:       0 0 auto;   /* content-sized; doesn't grow to fill empty popup space */
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* `display: flex` above overrides the browser's built-in [hidden]{display:none} —
+   this rule restores correct hiding behaviour for inactive tab panels. */
+.panel[hidden] {
+  display: none !important;
+}
+
+/* ── Toggle Switch ────────────────────────────────────────────────────────── */
+.hu-switch {
+  position:    relative;
+  flex-shrink: 0;
+  width:       36px;
+  height:      20px;
+}
+
+.hu-switch__input {
+  opacity:  0;
+  width:    0;
+  height:   0;
+  position: absolute;
+}
+
+.hu-switch__slider {
+  position:         absolute;
+  inset:            0;
+  background-color: var(--bg-input);
+  border:           1px solid var(--border);
+  border-radius:    999px;
+  cursor:           pointer;
+  transition:       background 0.18s, border-color 0.18s;
+}
+
+.hu-switch__slider::before {
+  content:          '';
+  position:         absolute;
+  width:            14px;
+  height:           14px;
+  left:             2px;
+  top:              50%;
+  transform:        translateY(-50%);
+  background-color: var(--text-muted);
+  border-radius:    50%;
+  transition:       transform 0.18s, background-color 0.18s;
+}
+
+.hu-switch__input:checked + .hu-switch__slider {
+  background-color: var(--dot-green);
+  border-color:     var(--dot-green);
+}
+
+/* Home tab (panelTemp) keeps enabled toggles on brand blue to match header chrome. */
+#panelTemp .hu-switch__input:checked + .hu-switch__slider {
+  background-color: var(--accent);
+  border-color:     var(--accent);
+}
+
+.hu-switch__input:checked + .hu-switch__slider::before {
+  transform:        translateY(-50%) translateX(16px);
+  background-color: #fff;
+}
+
+.hu-switch__input:focus-visible + .hu-switch__slider {
+  outline:        2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.hu-segmented {
+  display:       flex;
+  flex-shrink:   0;
+  gap:           2px;
+  padding:       2px;
+  background:    var(--bg-item);
+  border:        1px solid var(--border);
+  border-radius: 10px;
+}
+
+.hu-segmented__btn {
+  flex:        1 1 0;
+  min-width:   0;
+  border:      none;
+  background:  transparent;
+  color:       var(--text-secondary);
+  cursor:      pointer;
+  font-family: var(--font);
+  font-size:   11px;
+  font-weight: 600;
+  line-height: 1.25;
+  padding:     5px 9px;
+  border-radius: 8px;
+  transition:  background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  white-space: nowrap;
+}
+
+.hu-segmented__btn:hover {
+  background: var(--bg-item-hover);
+  color:      var(--text-primary);
+}
+
+.hu-segmented__btn--active {
+  background: var(--seg-accent-subtle, var(--accent-subtle));
+  color:      var(--seg-accent, var(--accent));
+}
+
+.hu-segmented__btn--active:hover {
+  background: color-mix(in srgb, var(--seg-accent, var(--accent)) 18%, var(--bg-item-hover));
+  color:      var(--seg-accent, var(--accent));
+}
+
+.hu-segmented__btn:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+@keyframes profiles-modal-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PANEL TRANSITION ANIMATION
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Panels that are being revealed get a subtle fade-in */
+.panel:not([hidden]) {
+  animation: panel-fade-in var(--dur-base) var(--ease) both;
+}
+
+@keyframes panel-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LIVE SESSION CAPSULE
+   ═══════════════════════════════════════════════════════════════════════════ */
+.live-capsule {
+  position:       absolute;
+  bottom:         68px;
+  left:           50%;
+  transform:      translateX(-50%);
+  z-index:        20;
+  display:        flex;
+  align-items:    center;
+  gap:            6px;
+  padding:        5px 12px 5px 10px;
+  background:     var(--bg-surface);
+  border:         1px solid var(--border);
+  border-radius:  var(--radius-pill);
+  white-space:    nowrap;
+  pointer-events: none;
+  animation:      capsule-in var(--dur-base) var(--ease-out) both;
+}
+
+.live-capsule[hidden] { display: none !important; }
+
+@keyframes capsule-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.live-capsule__dot {
+  width:         7px;
+  height:        7px;
+  border-radius: var(--radius-pill);
+  background:    var(--dot-green, #4ade80);
+  flex-shrink:   0;
+}
+
+.live-capsule__text {
+  font-size:   11px;
+  color:       var(--text-2, var(--text-secondary));
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-capsule__val {
+  font-weight: 700;
+}
+
+.live-capsule__val--shown { color: var(--dot-green, #4caf7d); }
+.live-capsule__val--hidden { color: var(--danger); }
+
+.live-capsule__divider { color: var(--text-4, var(--text-muted)); }
+.live-capsule__sep { color: var(--text-3, var(--text-muted)); }
+
+.live-capsule__label {
+  font-size: 10px;
+  color:     var(--text-4, var(--text-muted));
+}
+
+/* ── Toggle switch — flat, no glow ─────────────────────────────────────────── */
+.hu-switch__slider {
+  transition:
+    background-color var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease);
+}
+
+.hu-switch__slider::before {
+  transition:
+    transform var(--dur-base) var(--ease),
+    background-color var(--dur-base) var(--ease);
+}
+
+/* ── prefers-reduced-motion: strip all animations/transitions ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+*::before,
+*::after {
+    animation-duration:      0.01ms !important;
+    animation-iteration-count: 1   !important;
+    transition-duration:     0.01ms !important;
+    scroll-behavior:         auto  !important;
+  }}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY & FOCUS IMPROVEMENTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Globally consistent focus ring */
+:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius:  var(--radius-xs);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MY LIST PANEL — Expandable accordion card system
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Section color tokens ─────────────────────────────────────────────────── */
+:root {
+  --mylist-terms:    var(--accent);
+  --mylist-muted:    #ef4444;
+  --mylist-snoozed:  #6366f1;
+  --mylist-trusted:  #f59e0b;
+  --mylist-insights: #0ea5e9;
+  --mylist-allow:    #16a34a;
+  --mylist-review:   #8b5cf6;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMP PANEL — Eero-inspired category quickset
+   ═══════════════════════════════════════════════════════════════════════════ */
+.temp-panel {
+  overflow-y: auto;
+  padding:    var(--temp-page-pad) var(--temp-page-pad) var(--temp-tile-gap);
+  display:    flex;
+  flex-direction: column;
+  gap:        var(--temp-tile-gap);
+}
+
+#aiFilterMount {
+  width: 100%;
+}
+
+/* ── Category card ─────────────────────────────────────────────────────────── */
+.temp-category {
+  background:    var(--bg-surface);
+  border:        1px solid var(--border);
+  border-radius: 14px;
+  overflow:      hidden;
+}
+
+/* ── Category header row ───────────────────────────────────────────────────── */
+.temp-category__header {
+  display:     flex;
+  align-items: center;
+  gap:         12px;
+  padding:     6px 12px;
+  cursor:      pointer;
+  width:       100%;
+  border:      none;
+  background:  transparent;
+  color:       inherit;
+  font:        inherit;
+  text-align:  left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.temp-category__header:active {
+  opacity: 0.75;
+}
+
+.temp-category__header:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius:  14px;
+}
+
+.temp-category__header--static {
+  cursor: default;
+}
+
+.temp-category__header--static:active {
+  opacity: 1;
+}
+
+/* Icon tile — colored rounded square */
+.temp-category__icon-tile {
+  width:           36px;
+  height:          36px;
+  border-radius:   9px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+  background:      color-mix(in srgb, var(--cat-color) 20%, transparent);
+  color:           var(--cat-color);
+}
+
+.temp-category__icon-tile svg {
+  width:  18px;
+  height: 18px;
+}
+
+/* Copy block: name only */
+.temp-category__copy {
+  flex:      1;
+  min-width: 0;
+}
+
+.temp-category__name {
+  font-size:     var(--card-title-size);
+  font-weight:   var(--card-title-weight);
+  color:         var(--text-primary);
+  line-height:   var(--card-title-line);
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+
+/* Count pill — e.g. "2/6" */
+.temp-category__count-pill {
+  font-size:     11px;
+  font-weight:   600;
+  line-height:   1;
+  padding:       3px 7px;
+  border-radius: 999px;
+  background:    color-mix(in srgb, var(--cat-color) 18%, transparent);
+  color:         var(--cat-color);
+  flex-shrink:   0;
+  white-space:   nowrap;
+}
+
+/* Radial ring + chevron group */
+.temp-category__controls {
+  display:     flex;
+  align-items: center;
+  gap:         6px;
+  flex-shrink: 0;
+}
+
+.temp-category__icon-btn {
+  width:         22px;
+  height:        22px;
+  display:       inline-flex;
+  align-items:   center;
+  justify-content: center;
+  border:        1px solid var(--border);
+  border-radius: 999px;
+  background:    transparent;
+  color:         var(--text-muted);
+  cursor:        pointer;
+  padding:       0;
+  flex-shrink:   0;
+  transition:    color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.temp-category__icon-btn:hover {
+  color:        var(--text-primary);
+  border-color: var(--border-strong);
+  background:   color-mix(in srgb, var(--text-muted) 8%, transparent);
+}
+
+.temp-category__icon-btn:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.temp-category__body {
+  border-top: 1px solid var(--border);
+  padding:    10px 12px 12px;
+}
+
+/* Donut on the left, legend tiles stacked on the right. The legend
+   stretches to the donut's height so the tiles flex-fill that 200px. */
+.donut-panel__inner {
+  display:        flex;
+  flex-direction: row;
+  align-items:    stretch;
+  gap:            14px;
+}
+
+.donut-wrap {
+  align-self: flex-start;
+}
+
+/* ── Donut chart container ──────────────────────────────────────────────── */
+.donut-wrap {
+  position:   relative;
+  width:      200px;
+  height:     200px;
+  flex-shrink: 0;
+  overflow:   visible; /* allow metric dropdown to escape the 200×200 bounds */
+}
+
+.donut-svg {
+  width:  200px;
+  height: 200px;
+  transform: rotate(-90deg); /* start arcs at 12 o'clock */
+}
+
+/* ── Centre label (total hidden count) ──────────────────────────────────── */
+.donut-center {
+  position:        absolute;
+  inset:           0;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  pointer-events:  none;
+}
+
+.donut-center__value {
+  font-size:      36px;
+  font-weight:    700;
+  line-height:    1;
+  letter-spacing: -0.03em;
+  color:          var(--text-primary);
+}
+
+.donut-center__label {
+  font-size:   12px;
+  font-weight: 500;
+  line-height: 1;
+  margin-top:  6px;
+  color:       var(--text-secondary);
+}
+
+/* ── Legend tiles (compact stack alongside the donut) ─────────────────────── */
+.donut-legend {
+  list-style: none;
+  margin:     0;
+  padding:    0;
+  flex:       1 1 auto;
+  min-width:  0;
+  display:    flex;
+  flex-direction: column;
+  gap:        8px;
+  align-self: center;         /* vertically center the stack against the donut */
+}
+
+/* Each tile is content-sized for compact, consistent height — looks the same
+   whether there's 1 category or 5. The coloured stripe on the left edge
+   gives it identity without taking visual weight. */
+.donut-legend__item {
+  flex:          0 0 auto;
+  display:       grid;
+  grid-template-columns: 4px 1fr auto;
+  grid-template-rows:    auto auto;
+  grid-template-areas:
+    "stripe label count"
+    "stripe pct   count";
+  align-items:   center;
+  column-gap:    10px;
+  row-gap:       2px;
+  padding:       8px 12px;
+  border-radius: 10px;
+  background:    var(--bg-surface);
+  border:        1px solid var(--border);
+  overflow:      hidden;
+  transition:    border-color var(--dur-fast) var(--ease),
+                 background var(--dur-fast) var(--ease);
+}
+
+.donut-legend__item:hover {
+  border-color: var(--border-strong);
+  background:   var(--bg-item-hover);
+}
+
+/* Coloured stripe on the left edge — uses the swatch element with full grid-row span. */
+.donut-legend__swatch {
+  grid-area:     stripe;
+  align-self:    stretch;
+  width:         4px;
+  border-radius: 2px;
+}
+
+.donut-legend__label {
+  grid-area:    label;
+  align-self:   end;
+  font-size:    13px;
+  font-weight:  600;
+  color:        var(--text-primary);
+  line-height:  1.2;
+  min-width:    0;
+  overflow:     hidden;
+  text-overflow: ellipsis;
+  white-space:  nowrap;
+}
+
+.donut-legend__pct {
+  grid-area:    pct;
+  align-self:   start;
+  font-size:    11px;
+  font-weight:  500;
+  color:        var(--text-3);
+  line-height:  1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.donut-legend__count {
+  grid-area:    count;
+  align-self:   center;
+  font-size:    22px;
+  font-weight:  700;
+  color:        var(--text-primary);
+  line-height:  1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Empty / no-data state ──────────────────────────────────────────────── */
+/* Tiles are the same .donut-legend__item shells, just with count 0 and a
+   subtle dim so they read as placeholders rather than live data. */
+.donut-legend__item--zero {
+  opacity: 0.55;
+}
+
+.donut-legend__item--zero .donut-legend__count {
+  color:       var(--text-3);
+  font-weight: 600;
+}
+
+@keyframes historySkeletonShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SLOP SENSITIVITY SLIDER CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+.slop-slider-card {
+  margin-bottom: 0;
+}
+
+.slop-slider-card__body {
+  padding: 9px 12px 10px;
+}
+
+.slop-slider-card__level-badge {
+  min-width: 56px;
+  text-align: center;
+}
+
+/* ── Rail wrap ─────────────────────────────────────────────────────────────── */
+.slop-slider-card__rail-wrap {
+  --slop-stop-inset: 10px;
+
+  width:       100%;
+  margin:      2px 0 6px;
+  padding:     0;
+  box-sizing:  border-box;
+  overflow:    visible;
+}
+
+/* Native range input — gradient rail: filled portion green→yellow→red, track gray */
+.slop-slider-card__range {
+  width:              100%;
+  height:             20px;
+  -webkit-appearance: none;
+  appearance:         none;
+  background:         transparent;
+  outline:            none;
+  cursor:             pointer;
+  padding:            0;
+  border:             0;
+}
+
+/* Track — WebKit/Blink: gradient lives here, not on the input itself */
+.slop-slider-card__range::-webkit-slider-runnable-track {
+  height:        6px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      transparent 0,
+      transparent var(--slop-pct, 0%),
+      var(--slider-track) var(--slop-pct, 0%),
+      var(--slider-track) 100%
+    ),
+    linear-gradient(
+      to right,
+      var(--slop-good) 0%,
+      var(--slop-mid-rail) 50%,
+      var(--slop-mid-rail) 56%,
+      var(--slop-hot) 100%
+    );
+}
+
+/* Track — Firefox */
+.slop-slider-card__range::-moz-range-track {
+  height:        6px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      transparent 0,
+      transparent var(--slop-pct, 0%),
+      var(--slider-track) var(--slop-pct, 0%),
+      var(--slider-track) 100%
+    ),
+    linear-gradient(
+      to right,
+      var(--slop-good) 0%,
+      var(--slop-mid-rail) 50%,
+      var(--slop-mid-rail) 56%,
+      var(--slop-hot) 100%
+    );
+}
+
+/* Thumb — WebKit */
+.slop-slider-card__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width:         20px;
+  height:        20px;
+  border-radius: 50%;
+  background:    #ffffff;
+  border:        2px solid var(--border-strong, #555);
+  box-shadow:    0 1px 4px rgba(0,0,0,0.35);
+  cursor:        pointer;
+  margin-top:    -7px;
+  transition:    box-shadow 0.15s;
+}
+
+.slop-slider-card__range::-webkit-slider-thumb:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* Thumb — Firefox */
+.slop-slider-card__range::-moz-range-thumb {
+  width:         20px;
+  height:        20px;
+  border-radius: 50%;
+  background:    #ffffff;
+  border:        2px solid var(--border-strong, #555);
+  box-shadow:    0 1px 4px rgba(0,0,0,0.35);
+  cursor:        pointer;
+}
+
+.slop-slider-card__range:focus-visible {
+  outline:        2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius:  999px;
+}
+
+/* ── Stop labels ───────────────────────────────────────────────────────────── */
+.slop-slider-card__stops {
+  position:   relative;
+  height:     22px;
+  margin-top: 4px;
+}
+
+.slop-slider-card__stop {
+  position:   absolute;
+  transform:  translateX(-50%);
+  font-size:  11px;
+  line-height: 1;
+  color:      var(--text-muted);
+  text-align: center;
+  transition: color 0.15s;
+  user-select: none;
+}
+
+.slop-slider-card__stop:nth-child(n + 2) {
+  font-size: 17px;
+}
+
+.slop-slider-card__stop:nth-child(1) {
+  left: var(--slop-stop-inset);
+}
+.slop-slider-card__stop:nth-child(2) { left: calc(25% + (var(--slop-stop-inset) / 2)); }
+.slop-slider-card__stop:nth-child(3) { left: 50%; }
+.slop-slider-card__stop:nth-child(4) { left: calc(75% - (var(--slop-stop-inset) / 2)); }
+.slop-slider-card__stop:nth-child(5) {
+  left: calc(100% - var(--slop-stop-inset));
+}
+
+.slop-slider-card__stop--active {
+  color:       var(--text-primary);
+  font-weight: 600;
+}
+
+/* ── Forecast line ─────────────────────────────────────────────────────────── */
+.slop-slider-card__forecast {
+  font-size:  11px;
+  color:      var(--text-muted);
+  margin:     0;
+  line-height: 1.4;
+}
+
+/* ── Help button (? circle next to title) ──────────────────────────────────── */
+.slop-slider-card__help-btn {
+  font-size:       11px;
+  font-weight:     700;
+  line-height:     1;
+}
+
+.slop-slider-card__help-btn[aria-expanded="true"] {
+  color:        var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background:   color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* ── Debug drawer ──────────────────────────────────────────────────────────── */
+.slop-debug-drawer {
+  margin-top:    10px;
+  border-top:    1px solid var(--border);
+  padding-top:   10px;
+}
+
+.slop-debug-section {
+  margin-bottom: 12px;
+}
+
+.slop-debug-heading {
+  font-size:     10px;
+  font-weight:   600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color:         var(--text-muted);
+  margin:        0 0 6px;
+}
+
+/* ── Level blocks ──────────────────────────────────────────────────────────── */
+.slop-debug-level {
+  border-radius: 8px;
+  padding:       6px 8px;
+  margin-bottom: 4px;
+}
+
+.slop-debug-level--active {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.slop-debug-level--inactive {
+  opacity: 0.45;
+}
+
+.slop-debug-level--current {
+  background:  color-mix(in srgb, var(--accent) 10%, transparent);
+  border:      1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  opacity:     1;
+}
+
+.slop-debug-level__header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   4px;
+}
+
+.slop-debug-level__label {
+  font-size:   12px;
+  font-weight: 600;
+  color:       var(--text-primary);
+}
+
+.slop-debug-level__current-pip {
+  font-size:     10px;
+  font-weight:   600;
+  padding:       1px 6px;
+  border-radius: 999px;
+  background:    color-mix(in srgb, var(--accent) 18%, transparent);
+  color:         var(--accent);
+}
+
+/* ── Category toggle rows ──────────────────────────────────────────────────── */
+.slop-debug-added-list {
+  list-style: none;
+  padding:    0;
+  margin:     0;
+  display:    flex;
+  flex-direction: column;
+  gap:        2px;
+}
+
+.slop-debug-cat-item {
+  border-radius: 6px;
+  overflow:      hidden;
+}
+
+.slop-debug-cat-toggle {
+  display:         flex;
+  align-items:     center;
+  width:           100%;
+  background:      transparent;
+  border:          none;
+  padding:         4px 4px;
+  cursor:          pointer;
+  gap:             6px;
+  border-radius:   6px;
+  transition:      background 0.12s;
+}
+
+.slop-debug-cat-toggle:hover {
+  background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+}
+
+.slop-debug-cat-label {
+  font-size:  11px;
+  font-weight: 500;
+  color:      var(--text-secondary);
+  flex:       1;
+  text-align: left;
+}
+
+.slop-debug-cat-count {
+  font-size:  10px;
+  color:      var(--text-muted);
+  flex-shrink: 0;
+}
+
+.slop-debug-cat-chevron {
+  width:      12px;
+  height:     12px;
+  color:      var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.slop-debug-cat-toggle--open .slop-debug-cat-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Term list ─────────────────────────────────────────────────────────────── */
+.slop-debug-term-list {
+  list-style: none;
+  padding:    2px 4px 4px 16px;
+  margin:     0;
+  display:    flex;
+  flex-direction: column;
+  gap:        2px;
+}
+
+.slop-debug-term {
+  font-size:   10px;
+  font-family: ui-monospace, 'SF Mono', 'Fira Code', monospace;
+  color:       var(--text-muted);
+  padding:     1px 0;
+  word-break:  break-all;
+}
+
+/* ── Structural signal description ─────────────────────────────────────────── */
+.slop-debug-structural-desc {
+  font-size:   11px;
+  color:       var(--text-muted);
+  line-height: 1.5;
+  margin:      2px 4px 4px 16px;
+  padding:     0;
+}
+
+/* ── Help overlay mode ─────────────────────────────────────────────────────────
+   When the slop slider's "?" is active, the popup height is pinned by JS and
+   every other panel surface is hidden so the drawer fills the freed space and
+   scrolls in place — the extension's outer size stays put. */
+body.help-open .popup {
+  height: 100%;
+}
+
+body.help-open #aiFilterMount,
+body.help-open #hiddenModeMount,
+body.help-open .donut-panel__inner,
+body.help-open #liveCapsule {
+  display: none !important;
+}
+
+body.help-open .temp-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: var(--temp-page-pad);
+}
+
+body.help-open #slopSensitivityMount {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body.help-open .slop-slider-card,
+body.help-open .slop-slider-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body.help-open .slop-slider-card__body {
+  overflow: hidden;
+}
+
+body.help-open .slop-debug-drawer {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  margin-top:  10px;
+  padding-right: 4px;
+}
+
+/* ── AI Filter Toggle Card ─────────────────────────────────────────────────── */
+.ai-filter-card {
+  transition: border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+
+.ai-filter-card--on {
+  border-color: var(--border-strong);
+  background:   var(--bg-surface);
+}
+
+.ai-filter-card .temp-category__icon-tile {
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+
+.ai-filter-card--on .temp-category__icon-tile {
+  background:   color-mix(in srgb, var(--cat-color) 16%, var(--bg-item));
+  color:        var(--cat-color);
+}
+
+.ai-filter-card .temp-category__controls {
+  margin-left: auto;
+}
+
+/* ── Hidden-Item Mode Card ─────────────────────────────────────────────────
+   No icon, no "When matched" label, no outer capsule — Audit / Minimize /
+   Hide read as three text choices in the same font as "Hide AI Posts" /
+   "Slop Sensitivity". Selected choice gets a tinted pill in the card accent
+   color so it's unmistakable; unselected choices are muted plain text. */
+.hidden-mode-card .temp-category__icon-tile,
+.hidden-mode-card .temp-category__copy {
+  display: none;
+}
+
+.hidden-mode-card .temp-category__controls {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hidden-mode-card .hu-segmented {
+  width:         100%;
+  background:    transparent;
+  border:        none;
+  border-radius: 0;
+  padding:       0;
+  gap:           6px;
+  justify-content: space-between;
+}
+
+.hidden-mode-card .hu-segmented__btn {
+  flex:          1 1 0;
+  padding:       6px 8px;
+  border-radius: 8px;
+  font-size:     var(--card-title-size);
+  font-weight:   var(--card-title-weight);
+  line-height:   var(--card-title-line);
+  color:         var(--text-secondary);
+  background:    transparent;
+  border:        1px solid transparent;
+}
+
+.hidden-mode-card .hu-segmented__btn:hover {
+  background: var(--bg-item-hover);
+  color:      var(--text-primary);
+}
+
+.hidden-mode-card .hu-segmented__btn--active,
+.hidden-mode-card .hu-segmented__btn--active:hover {
+  background:   color-mix(in srgb, var(--cat-color, var(--accent)) 16%, var(--bg-item));
+  color:        var(--text-primary);
+  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent);
+  box-shadow:   inset 0 0 0 1px color-mix(in srgb, var(--cat-color, var(--accent)) 10%, transparent);
+}
